@@ -1,0 +1,24 @@
+GENERAL:
+
+- [ ] Show/Hide Password functionality in Login and Register Pages
+- [ ] Add image to cloudinary and store public url to mongodb for products
+- [ ] DARK MODE
+- [x] Make the pages mentioned in footer
+- [x] Use [this](https://shirt-shop.labs.vercel.dev/#) as example for items in footer menu
+- [ ] When selecting category when the search query param has something, only the category is switched and the search query param is ignored
+- [x] If there is no user loggedin, and someone adds something to cart, the website should redirect to sign-in page
+- [x] Remove the error that is shown on the page when there is no user but `fetchCartItems` tries to fetch the cart items
+- [x] Add size chart in modal in product description page
+- [x] Banner for ongoing sales and promotion under/above the navbar
+- [ ] Reviews for products
+- [ ] Related products
+- [x] Newsletter form in footer
+- [x] On submit of email do api call
+- [x] Make footer responsive
+- [x] Add fabric and care and highlights in product description in an accordian
+- [ ] Add Toasts
+  - [x] subscribe to newsletter
+  - [ ] login
+  - [ ] logout
+  - [ ] register
+  - [ ] add product to cart

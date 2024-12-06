@@ -1,65 +1,28 @@
-import { Badge } from '@/components/Badge'
-import { Background } from '@/components/Background'
-import Link from 'next/link'
-import React from 'react'
-import config from '@payload-config'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
+// 'use client'
+import { ThreeItemGrid } from '@/components/grid/three-items'
+import { Carousel } from '@/components/grid/carousel'
+import Footer from '@/components/footer'
+// import { useSearchParams } from 'next/navigation'
+// import { toast } from 'sonner'
 
-const Page = async () => {
-  const payload = await getPayloadHMR({
-    config,
-  })
+export const metadata = {
+  description: 'High-performance ecommerce store built with Next.js, Vercel, and Shopware.',
+  openGraph: {
+    type: 'website',
+  },
+}
 
-  const data = await payload.find({
-    collection: 'pages',
-  })
+export default function Home() {
+  // const searchParams = useSearchParams()
+  // const isSignedUp = searchParams.get('signedUp')
+  // const isSignedIn = searchParams.get('signedIn')
+  // if (isSignedUp) toast.success('You have successfully signed up!')
+  // else if (isSignedIn) toast.success('You have successfully signed in!')
   return (
     <>
-      <main>
-        <article>
-          <Badge />
-          <h1>Payload 3.0 - {payload?.config?.collections?.length} collections loaded</h1>{' '}
-          <p>
-            This BETA is rapidly evolving, you can report any bugs against{' '}
-            <Link href="https://github.com/payloadcms/payload-3.0-demo/issues" target="_blank">
-              the repo
-            </Link>{' '}
-            or in the{' '}
-            <Link
-              href="https://discord.com/channels/967097582721572934/1215659716538273832"
-              target="_blank"
-            >
-              dedicated channel in Discord
-            </Link>
-            . Payload is running at <Link href="/admin">/admin</Link>. An example of a custom route
-            running the Local API can be found at <Link href="/my-route">/my-route</Link>.
-          </p>
-          <p>You can use the Local API in your server components like this:</p>
-        </article>
-        <div className="codeBlock">
-          <pre>
-            <code>
-              {`import { getPayloadHMR } from '@payloadcms/next/utilities'
-import config from '@payload-config'
-const payload = await getPayloadHMR({ config })
-const data = await payload.find({
-  collection: 'pages',
-})
-return <Pages data={data} />
-`}
-            </code>
-          </pre>
-        </div>
-        <p>This is the example in action - here is a list of all page titles:</p>
-        <ul>
-          {data.docs.map((doc) => (
-            <li key={doc.id}>{doc.title ?? 'No title'}</li>
-          ))}
-        </ul>
-      </main>
-      <Background />
+      <ThreeItemGrid />
+      <Carousel />
+      <Footer />
     </>
   )
 }
-
-export default Page

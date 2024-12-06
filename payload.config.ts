@@ -1,28 +1,17 @@
 import path from 'path'
 // import { postgresAdapter } from '@payloadcms/db-postgres'
+// import { searchPlugin } from '@payloadcms/plugin-search'
 import { en } from 'payload/i18n/en'
-import {
-  AlignFeature,
-  BlockquoteFeature,
-  BlocksFeature,
-  BoldFeature,
-  ChecklistFeature,
-  HeadingFeature,
-  IndentFeature,
-  InlineCodeFeature,
-  ItalicFeature,
-  lexicalEditor,
-  LinkFeature,
-  OrderedListFeature,
-  ParagraphFeature,
-  RelationshipFeature,
-  UnorderedListFeature,
-  UploadFeature,
-} from '@payloadcms/richtext-lexical'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
+import { ProductCollection } from '@/collections/Product/Product'
+import { create } from 'domain'
+import { CartCollection } from '@/collections/Cart'
+import { UserCollection } from '@/collections/User'
+import { NewsletterCollection } from '@/collections/Newsletter'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -31,15 +20,16 @@ export default buildConfig({
   //editor: slateEditor({}),
   editor: lexicalEditor(),
   collections: [
-    {
-      slug: 'users',
-      auth: true,
-      access: {
-        delete: () => false,
-        update: () => false,
-      },
-      fields: [],
-    },
+    // {
+    //   slug: 'users',
+    //   auth: true,
+    //   access: {
+    //     delete: () => false,
+    //     update: () => false,
+    //   },
+    //   fields: [],
+    // },
+    UserCollection,
     {
       slug: 'pages',
       admin: {
@@ -59,6 +49,13 @@ export default buildConfig({
     {
       slug: 'media',
       upload: true,
+      access: {
+        read: () => true,
+        admin: () => true,
+      },
+      admin: {
+        useAsTitle: 'text',
+      },
       fields: [
         {
           name: 'text',
@@ -66,6 +63,9 @@ export default buildConfig({
         },
       ],
     },
+    ProductCollection,
+    CartCollection,
+    NewsletterCollection,
   ],
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -95,6 +95,14 @@ export default buildConfig({
       prefillOnly: true,
     },
   },
+  // plugins: [
+  //   searchPlugin({
+  //     collections: ['products'],
+  //     defaultPriorities: {
+  //       products: 20,
+  //     },
+  //   }),
+  // ],
   async onInit(payload) {
     const existingUsers = await payload.find({
       collection: 'users',
@@ -107,6 +115,8 @@ export default buildConfig({
         data: {
           email: 'dev@payloadcms.com',
           password: 'test',
+          role: 'admin',
+          name: 'Admin',
         },
       })
     }

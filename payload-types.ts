@@ -14,6 +14,9 @@ export interface Config {
     users: User;
     pages: Page;
     media: Media;
+    products: Product;
+    carts: Cart;
+    newsletter: Newsletter;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -51,6 +54,12 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: string;
+  name: string;
+  role?: ('admin' | 'customer') | null;
+  password: string | null;
+  address?: string | null;
+  mobileNumber?: string | null;
+  profileImage?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -60,7 +69,25 @@ export interface User {
   hash?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
-  password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: string;
+  text?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -89,22 +116,63 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
+ * via the `definition` "products".
  */
-export interface Media {
+export interface Product {
   id: string;
-  text?: string | null;
+  name: string;
+  price: number;
+  descriptionPara1: string;
+  descriptionPara2?: string | null;
+  descriptionPara3?: string | null;
+  featured?: boolean | null;
+  category: 'tshirt' | 'poster' | 'hoodie' | 'mug' | 'sticker' | 'phone-case' | 'hat' | 'bag' | 'inner';
+  images?:
+    | {
+        image: string | Media;
+        cloudinaryUrl?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  sizes?: ('XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | '5x7' | 'A2' | 'A1')[] | null;
+  colors?: ('White' | 'Black' | 'Blue' | 'Brown' | 'Green' | 'Purple' | 'Navy' | 'Red' | 'Teal' | 'Maroon')[] | null;
+  highlights?:
+    | {
+        highlight?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  slug?: string | null;
   updatedAt: string;
   createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "carts".
+ */
+export interface Cart {
+  id: string;
+  userId: string | User;
+  name: string;
+  productId: string | Product;
+  quantity: number;
+  price: number;
+  color: string;
+  category: string;
+  size: string;
+  image: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletter".
+ */
+export interface Newsletter {
+  id: string;
+  email: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -124,16 +192,24 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'products';
+        value: string | Product;
+      } | null)
+    | ({
+        relationTo: 'carts';
+        value: string | Cart;
+      } | null)
+    | ({
+        relationTo: 'newsletter';
+        value: string | Newsletter;
       } | null);
   globalSlug?: string | null;
-  _lastEdited: {
-    user: {
-      relationTo: 'users';
-      value: string | User;
-    };
-    editedAt?: string | null;
+  user: {
+    relationTo: 'users';
+    value: string | User;
   };
-  isLocked?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
