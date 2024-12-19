@@ -6,9 +6,9 @@ const Banner = () => {
   const path = usePathname()
   let banner = ''
   if (path === '/') {
-    banner = 'h-full text-white text-center bg-[#0a0a0a] p-1 text-lg'
+    banner = 'h-full text-white text-center bg-[#0a0a0a] p-1 text-md'
   } else {
-    banner = 'h-full text-white text-center bg-[#0a0a0a] p-1 text-lg hidden'
+    banner = 'h-full text-white text-center bg-[#0a0a0a] p-1 text-md hidden'
   }
   return (
     <div className={banner}>

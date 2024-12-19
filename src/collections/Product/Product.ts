@@ -1,6 +1,6 @@
 import payload, { CollectionConfig, FieldHook, PayloadRequest } from 'payload'
 import { v2 as cloudinary } from 'cloudinary'
-import searcProductshHandler from './handler'
+// import searcProductshHandler from './handler'
 import { NextRequest } from 'next/server'
 
 // Configure Cloudinary
@@ -197,37 +197,37 @@ export const ProductCollection: CollectionConfig = {
           },
         },
       ],
-      hooks: {
-        afterChange: [
-          async ({ value, data, originalDoc }) => {
-            if (value && Array.isArray(value)) {
-              const updatedImages = await Promise.all(
-                value.map(async (imageEntry: any) => {
-                  const mediaDoc = await payload.findByID({
-                    collection: 'media',
-                    id: imageEntry.image,
-                  })
+      // hooks: {
+      //   afterChange: [
+      //     async ({ value, data, originalDoc }) => {
+      //       if (value && Array.isArray(value)) {
+      //         const updatedImages = await Promise.all(
+      //           value.map(async (imageEntry: any) => {
+      //             const mediaDoc = await payload.findByID({
+      //               collection: 'media',
+      //               id: imageEntry.image,
+      //             })
 
-                  if (mediaDoc?.url) {
-                    const uploadResponse = await uploadToCloudinary(mediaDoc.url, data?.name || '')
+      //             if (mediaDoc?.url) {
+      //               const uploadResponse = await uploadToCloudinary(mediaDoc.url, data?.name || '')
 
-                    if (uploadResponse?.secure_url) {
-                      return {
-                        image: imageEntry.image,
-                        cloudinaryUrl: uploadResponse.secure_url,
-                      }
-                    }
-                  }
-                  return imageEntry
-                }),
-              )
-              if (data) {
-                data.images = updatedImages
-              }
-            }
-          },
-        ],
-      },
+      //               if (uploadResponse?.secure_url) {
+      //                 return {
+      //                   image: imageEntry.image,
+      //                   cloudinaryUrl: uploadResponse.secure_url,
+      //                 }
+      //               }
+      //             }
+      //             return imageEntry
+      //           }),
+      //         )
+      //         if (data) {
+      //           data.images = updatedImages
+      //         }
+      //       }
+      //     },
+      //   ],
+      // },
     },
     {
       name: 'sizes',
@@ -274,6 +274,97 @@ export const ProductCollection: CollectionConfig = {
         position: 'sidebar',
       },
       hooks: { beforeValidate: [formatSlug('name')] },
+    },
+    {
+      name: 'tags',
+      type: 'array',
+      fields: [
+        {
+          name: 'tag',
+          type: 'text',
+        },
+      ],
+    },
+  ],
+  hooks: {
+    afterRead: [
+      async ({ doc, req }) => {
+        // Fetch reviews associated with this product
+        const reviews = await req.payload.find({
+          collection: 'reviews',
+          where: {
+            product: {
+              equals: doc.id, // Fetch reviews where `product` matches this product's ID
+            },
+          },
+        })
+        doc.reviews = reviews.docs // Attach reviews to the product response
+        return doc
+      },
+    ],
+  },
+  endpoints: [
+    {
+      path: '/related-products',
+      method: 'get',
+      handler: async (req: PayloadRequest) => {
+        try {
+          if (!req.url) {
+            return new Response(JSON.stringify({ error: 'Request URL is missing' }), {
+              status: 400,
+            })
+          }
+          const url = new URL(req.url)
+          const productId = url.searchParams.get('productId')
+          console.log('PRODUCT ID: ', productId)
+          console.log('Finding product with ID:', productId)
+          if (!productId) {
+            return new Response(JSON.stringify({ error: 'Product ID is required' }), {
+              status: 400,
+            })
+          }
+          const product = await payload.findByID({ collection: 'products', id: productId })
+          console.log('Product found:', product)
+
+          if (!productId) {
+            return new Response(JSON.stringify({ error: 'Product ID is required' }), {
+              status: 400,
+            })
+          }
+
+          // Fetch the current product
+          const currentProduct = await payload.findByID({
+            collection: 'products',
+            id: productId,
+          })
+
+          if (!currentProduct) {
+            return new Response(JSON.stringify({ error: 'Product not found' }), { status: 404 })
+          }
+
+          // Fetch related products based on category or tags
+          const relatedProducts = await payload.find({
+            collection: 'products',
+            where: {
+              id: { not_equals: productId }, // Exclude the current product
+              or: [
+                { category: { equals: currentProduct.category } },
+                {
+                  tags: {
+                    contains: currentProduct.tags || [],
+                  },
+                },
+              ],
+            },
+            limit: 5, // Limit the number of related products
+          })
+
+          return new Response(JSON.stringify(relatedProducts), { status: 200 })
+        } catch (error) {
+          console.log(error)
+          return new Response(JSON.stringify({ error: 'An error occurred' }), { status: 500 })
+        }
+      },
     },
   ],
 }

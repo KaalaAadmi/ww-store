@@ -19,6 +19,7 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_SERVER_URL,
   },
+  output: 'standalone',
 }
 
 export default withPayload(nextConfig)

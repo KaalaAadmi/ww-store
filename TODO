@@ -11,7 +11,7 @@ GENERAL:
 - [x] Add size chart in modal in product description page
 - [x] Banner for ongoing sales and promotion under/above the navbar
 - [ ] Reviews for products
-- [ ] Related products
+- [x] Related products
 - [x] Newsletter form in footer
 - [x] On submit of email do api call
 - [x] Make footer responsive

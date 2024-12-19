@@ -15,6 +15,7 @@ export interface Config {
     pages: Page;
     media: Media;
     products: Product;
+    reviews: Review;
     carts: Cart;
     newsletter: Newsletter;
     'payload-locked-documents': PayloadLockedDocument;
@@ -143,6 +144,26 @@ export interface Product {
       }[]
     | null;
   slug?: string | null;
+  tags?:
+    | {
+        tag?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews".
+ */
+export interface Review {
+  id: string;
+  title: string;
+  content: string;
+  rating: number;
+  product: string | Product;
+  author: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -196,6 +217,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'products';
         value: string | Product;
+      } | null)
+    | ({
+        relationTo: 'reviews';
+        value: string | Review;
       } | null)
     | ({
         relationTo: 'carts';

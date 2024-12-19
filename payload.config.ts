@@ -8,10 +8,11 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 import { ProductCollection } from '@/collections/Product/Product'
-import { create } from 'domain'
+// import { create } from 'domain'
 import { CartCollection } from '@/collections/Cart'
 import { UserCollection } from '@/collections/User'
 import { NewsletterCollection } from '@/collections/Newsletter'
+import { ReviewsCollection } from '@/collections/Reviews'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -64,6 +65,7 @@ export default buildConfig({
       ],
     },
     ProductCollection,
+    ReviewsCollection,
     CartCollection,
     NewsletterCollection,
   ],
@@ -78,6 +80,9 @@ export default buildConfig({
   // }),
   db: mongooseAdapter({
     url: process.env.MONGODB_URI || '',
+    connectOptions: {
+      useFacet: true,
+    },
   }),
 
   /**
@@ -95,14 +100,6 @@ export default buildConfig({
       prefillOnly: true,
     },
   },
-  // plugins: [
-  //   searchPlugin({
-  //     collections: ['products'],
-  //     defaultPriorities: {
-  //       products: 20,
-  //     },
-  //   }),
-  // ],
   async onInit(payload) {
     const existingUsers = await payload.find({
       collection: 'users',

@@ -53,7 +53,7 @@ export const fetchDocs = async <T>(
     body: JSON.stringify({
       query: queryMap[collection].query,
       variables: {
-        depth: 3,
+        // depth: 3,
         id, // Pass the ID directly
       },
     }),

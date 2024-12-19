@@ -4,6 +4,8 @@ import {
   PRODUCT,
   SEARCH_VALUE_CATEGORY_PRODUCTS,
   SEARCH_VALUE_PRODUCTS,
+  RELATED_PRODUCTS,
+  REVIEWS,
 } from '../graphQL/Product'
 import { ME_USER } from '../graphQL/User'
 
@@ -32,6 +34,14 @@ const queryMap: Record<string, { query: string; key: string }> = {
     query: SEARCH_VALUE_CATEGORY_PRODUCTS,
     key: 'Products',
   },
+  related_products: {
+    query: RELATED_PRODUCTS,
+    key: 'Products',
+  },
+  reviews: {
+    query: REVIEWS,
+    key: 'Reviews',
+  },
 }
 
 export const fetchDoc = async <T>(args: {
@@ -39,8 +49,9 @@ export const fetchDoc = async <T>(args: {
   slug?: string
   id?: string
   category?: string
+  t?: string[]
 }): Promise<T> => {
-  const { collection, slug, id, category } = args || {}
+  const { collection, slug, id, category, t } = args || {}
   if (!queryMap[collection]) throw new Error(`Collection ${collection} not found`)
   if (!id) throw new Error(`ID is required for collection ${collection}`)
 
@@ -52,7 +63,7 @@ export const fetchDoc = async <T>(args: {
       headers: {
         'Content-Type': 'application/json',
       },
-      // credentials: 'include',
+      credentials: 'include',
       cache: 'no-store',
       next: { tags: [`${collection}`] },
       body: JSON.stringify({
@@ -61,13 +72,16 @@ export const fetchDoc = async <T>(args: {
           id, // Pass the ID directly
           slug,
           category,
+          t,
         },
       }),
     })
       ?.then((res) => res.json())
       ?.then((res) => {
+        console.log(res.data)
         if (res.errors) throw new Error(res.errors[0]?.message || 'Error fetching doc')
         if (collection === 'product') return res?.data?.[queryMap[collection].key]
+        if (collection === 'review') return res?.data?.[queryMap[collection].key]
         return res?.data?.[queryMap[collection].key]?.docs
       })
     return doc

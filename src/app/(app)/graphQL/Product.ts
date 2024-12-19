@@ -112,6 +112,9 @@ query Product($id: String!) {
             highlight
             id
         }
+            tags{
+            tag
+            }
     }
 }
 `
@@ -220,6 +223,52 @@ query Products($id: String!,$slug:Product_category_Input!) {
             slug
             updatedAt
             createdAt
+        }
+    }
+}
+
+`
+
+export const RELATED_PRODUCTS = `
+query Products ($id: String, $t: [String!]!) {
+    Products(
+        where: {
+      AND: [
+        { id: { not_equals: $id } }
+        { OR: [{ tags__tag: { in: $t } }] }
+      ]
+    }
+    ) {
+        docs {
+            id
+            name
+            price
+            category
+            tags {
+                tag
+            }
+            images {
+                image {
+                    text
+                    url
+                }
+            }
+        }
+    }
+}
+
+`
+
+export const REVIEWS = `
+query Reviews($id: String!) {
+    Reviews(where: { product: { equals: $id } }) {
+        totalDocs
+        docs {
+            id
+            title
+            content
+            rating
+            author
         }
     }
 }

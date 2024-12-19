@@ -96,7 +96,7 @@ const ContactPage: React.FC = () => {
       <div className="flex flex-wrap gap-10 justify-evenly items-center px-16 py-14 mt-28 w-full text-2xl text-black bg-white min-h-[786px] max-md:px-5 max-md:mt-10 max-md:max-w-full">
         <img
           loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/bd093dc1357f910ba20b078f113af5df0e869e635a047aae0814c7fb44e580a6?placeholderIfAbsent=true&apiKey=514c79f4aed04c1788291a73088cc5e0"
+          src={`https://cdn.builder.io/api/v1/image/assets/TEMP/bd093dc1357f910ba20b078f113af5df0e869e635a047aae0814c7fb44e580a6?placeholderIfAbsent=true&apiKey=${process.env.FIGMA_PLUGIN_API_KEY}`}
           alt="Office location map"
           className="object-contain self-stretch my-auto aspect-[0.9] min-w-[240px] rounded-[50px] w-[603px] max-md:max-w-full"
         />
