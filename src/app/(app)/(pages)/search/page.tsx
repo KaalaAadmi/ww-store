@@ -12,8 +12,18 @@ import { menu } from 'test-data'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import payloadConfig from '@payload-config'
+import { Suspense } from 'react'
+export const dynamic = 'force-dynamic'
 
-export default async function SearchPage(props: {
+const SearchPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SearchContent />
+    </Suspense>
+  )
+}
+
+async function SearchContent(props: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   const searchParams = await props.searchParams
@@ -64,6 +74,7 @@ export default async function SearchPage(props: {
   // console.log('products:', products)
   return (
     <>
+      {' '}
       {searchValue && products?.length === 0 ? (
         <div className="mx-auto flex max-w-screen-2xl flex-col gap-8 px-4 pb-4 text-black md:flex-row dark:text-white">
           <p className="mb-4">
@@ -119,3 +130,5 @@ export default async function SearchPage(props: {
     </>
   )
 }
+
+export default SearchPage

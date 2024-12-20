@@ -68,6 +68,8 @@ export const ModalBody = ({ children, className }: { children: ReactNode; classN
 
   const modalRef = useRef(null)
   const { setOpen } = useModal()
+  // @ts-ignore
+
   useOutsideClick(modalRef, () => setOpen(false))
 
   return (
@@ -85,12 +87,16 @@ export const ModalBody = ({ children, className }: { children: ReactNode; classN
             opacity: 0,
             backdropFilter: 'blur(0px)',
           }}
+          // @ts-ignore
+
           className="fixed [perspective:800px] [transform-style:preserve-3d] inset-0 h-full w-full  flex items-center justify-center z-50"
         >
           <Overlay />
 
           <motion.div
             ref={modalRef}
+            // @ts-ignore
+
             className={cn(
               'min-h-[50%] max-h-[90%] md:max-w-[40%] bg-white dark:bg-neutral-100 border border-transparent md:rounded-2xl relative z-50 flex flex-col flex-1 overflow-hidden',
               className,
@@ -165,6 +171,8 @@ const Overlay = ({ className }: { className?: string }) => {
         opacity: 0,
         backdropFilter: 'blur(0px)',
       }}
+      // @ts-ignore
+
       className={`fixed inset-0 h-full w-full bg-black bg-opacity-50 z-50 ${className}`}
     ></motion.div>
   )

@@ -9,7 +9,7 @@ import { ArrowRight, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 // import { toast } from "sonner";
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 // import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 // import { useSignIn } from "@clerk/nextjs";
@@ -24,7 +24,7 @@ type FormData = {
 
 const Page = () => {
   const [isLoading, setIsLoading] = useState(false)
-  const searchParams = useSearchParams()
+  // const searchParams = useSearchParams()
 
   //   const { isLoaded, signIn, setActive } = useSignIn();
   const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -44,15 +44,15 @@ const Page = () => {
     const { email, password } = data
     console.log(email, password)
     event?.preventDefault()
-    const redirect = searchParams.get('redirect')
+    // const redirect = searchParams.get('redirect')
     const timer = setTimeout(() => {
       setIsLoading(true)
     }, 1000)
     try {
       await login(data)
       clearTimeout(timer)
-      if (redirect) router.push('/?signedIn=true')
-      else router.push(`/?signedIn=true`)
+      // if (redirect) router.push('/?signedIn=true')
+      router.push(`/?signedIn=true`)
     } catch (_) {
       clearTimeout(timer)
       setError('There was an error with the credentials provided. Please try again.')

@@ -99,6 +99,8 @@ export const CartProvider = ({
         if (!response.ok) throw new Error('Failed to add cart item')
         fetchCartItems()
       } else {
+        // @ts-ignore
+
         setCartItems((prev) => {
           const existingItem = prev.find(
             (cartItem) =>

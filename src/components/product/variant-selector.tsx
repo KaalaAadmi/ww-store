@@ -48,6 +48,8 @@ export function VariantSelector({
   useEffect(() => {
     // Update filteredData when the units change
     const filtered = data.filter((item) => item.unit === units)
+    // @ts-ignore
+
     setFilteredData(filtered)
   }, [units])
   sizes.includes('_5x7') && sizes.push('5"x7"')

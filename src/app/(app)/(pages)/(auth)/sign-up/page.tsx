@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import { ArrowRight, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 // import { toast } from "sonner";
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 // import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { useState } from 'react'
 // import { useSignUp } from "@clerk/nextjs";
@@ -42,7 +42,7 @@ const Page = () => {
     mode: 'onTouched',
   })
 
-  const searchParams = useSearchParams()
+  // const searchParams = useSearchParams()
   const { login, create } = useAuth()
   const router = useRouter()
 
@@ -50,7 +50,7 @@ const Page = () => {
     const { name, email, password, confirmPassword } = data
     console.log(name, email, password, confirmPassword)
     event?.preventDefault()
-    const redirect = searchParams.get('redirect')
+    // const redirect = searchParams.get('redirect')
     const timer = setTimeout(() => {
       setIsLoading(true)
     }, 1000)
@@ -64,8 +64,8 @@ const Page = () => {
       await create(userData)
       await login(data)
       clearTimeout(timer)
-      if (redirect) router.push('/?signedUp=true')
-      else router.push(`/?signedUp=true`)
+      // if (redirect) router.push('/?signedUp=true')
+      router.push(`/?signedUp=true`)
     } catch (_) {
       clearTimeout(timer)
       setError('There was an error registering. Please try again.')

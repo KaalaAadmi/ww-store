@@ -7,6 +7,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 //   import { SizeData } from "@/lib/types";
+// @ts-ignore
 
 export function SizeTable({ data }) {
   return (
@@ -19,13 +20,16 @@ export function SizeTable({ data }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data?.map((item) => (
-          <TableRow key={item.sizeLabel} className="text-center">
-            <TableCell className="font-medium text-center">{item.sizeLabel}</TableCell>
-            <TableCell className="text-center">{item.length}</TableCell>
-            <TableCell className="text-center">{item.width}</TableCell>
-          </TableRow>
-        ))}
+        {
+          // @ts-ignore
+          data?.map((item) => (
+            <TableRow key={item.sizeLabel} className="text-center">
+              <TableCell className="font-medium text-center">{item.sizeLabel}</TableCell>
+              <TableCell className="text-center">{item.length}</TableCell>
+              <TableCell className="text-center">{item.width}</TableCell>
+            </TableRow>
+          ))
+        }
       </TableBody>
     </Table>
   )

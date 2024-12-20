@@ -260,7 +260,7 @@ query Products ($id: String, $t: [String!]!) {
 `
 
 export const REVIEWS = `
-query Reviews($id: String!) {
+query Reviews($id: JSON!) {
     Reviews(where: { product: { equals: $id } }) {
         totalDocs
         docs {
@@ -272,5 +272,4 @@ query Reviews($id: String!) {
         }
     }
 }
-
 `

@@ -106,6 +106,7 @@ export const fetchDoc = async <T>(args: {
       ?.then((res) => {
         if (res.errors) throw new Error(res.errors[0]?.message || 'Error fetching doc')
         if (collection === 'product') return res?.data?.[queryMap[collection].key]
+        if (collection === 'reviews') return res?.data?.[queryMap[collection].key]
         return res?.data?.[queryMap[collection].key]?.docs
       })
     return doc

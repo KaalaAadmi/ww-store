@@ -9,6 +9,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 // import { Menu } from 'lib/shopware/types';
 import Search, { SearchSkeleton } from './search'
 import { Button } from '../ui/button'
+// @ts-ignore
 
 export default function MobileMenu({ menu }) {
   const pathname = usePathname()
@@ -79,16 +80,19 @@ export default function MobileMenu({ menu }) {
                 </div>
                 {menu.length ? (
                   <ul className="flex w-full flex-col">
-                    {menu.map((item) => (
-                      <li
-                        className="py-2 text-xl text-black transition-colors hover:text-neutral-500 dark:text-white"
-                        key={item.title}
-                      >
-                        <Link href={item.path} prefetch={true} onClick={closeMobileMenu}>
-                          {item.title}
-                        </Link>
-                      </li>
-                    ))}
+                    {
+                      // @ts-ignore
+                      menu.map((item) => (
+                        <li
+                          className="py-2 text-xl text-black transition-colors hover:text-neutral-500 dark:text-white"
+                          key={item.title}
+                        >
+                          <Link href={item.path} prefetch={true} onClick={closeMobileMenu}>
+                            {item.title}
+                          </Link>
+                        </li>
+                      ))
+                    }
                   </ul>
                 ) : null}
               </div>

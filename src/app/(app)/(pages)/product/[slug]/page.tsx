@@ -75,8 +75,12 @@ export default async function ProductPage(props: { params: Promise<{ slug: strin
   const tags =
     product.tags?.flatMap((tag) => (tag?.tag ? [tag.tag] : [])) || // Ensure only valid strings are added
     []
-  const reviews = await fetchDoc<Review[]>({ collection: 'reviews', id: product.id })
-  console.log(reviews)
+  console.log('PRODUCT ID:', product.id)
+  const reviews = await fetchDoc<Review[]>({
+    collection: 'reviews',
+    id: product.id,
+  })
+  console.log('REVIEWS', reviews)
   // console.log('Processed Tags:', tags) // Debug to confirm
   // const pt = product.tags!
   // let tags: string[] = []

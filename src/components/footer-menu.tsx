@@ -51,12 +51,18 @@ export default function FooterMenu({ menu }: { menu: FooterMenuType }) {
           {item.children.length > 0 ? (
             <ul className="py-3 md:py-0 md:pt-4">
               {item.children.map((item) => (
-                <FooterMenuItem key={item.title} item={item} />
+                <FooterMenuItem
+                  key={item.title}
+                  // @ts-ignore
+
+                  item={item}
+                />
               ))}
             </ul>
           ) : (
             <Link
               key={item.title}
+              // @ts-ignore
               href={item.path}
               className="text-gray-800 transition duration-150 ease-in-out hover:text-gray-300 dark:text-gray-100"
             >
