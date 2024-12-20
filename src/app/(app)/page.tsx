@@ -20,8 +20,8 @@ export default function Home() {
   // else if (isSignedIn) toast.success('You have successfully signed in!')
   return (
     <>
-      {/* <ThreeItemGrid /> */}
-      {/* <Carousel /> */}
+      <ThreeItemGrid />
+      <Carousel />
       <Footer />
     </>
   )
